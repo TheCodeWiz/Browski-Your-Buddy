@@ -33,7 +33,7 @@ A modern, elegant chatbot powered by Groq's advanced language models. Built with
 1. **Clone the repository**
 ```bash
 git clone https://github.com/TheCodeWiz/BudAI-Your-Buddy.git
-cd ai-chat-buddy
+cd BudAI-Your-Buddy
 ```
 
 2. **Install dependencies**
