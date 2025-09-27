@@ -20,7 +20,8 @@ export async function POST(request: Request){
                 role: "user",
                 content: message,
             }],
-            model: "openai/gpt-oss-120b"
+            // model: "openai/gpt-oss-120b"
+            model: "groq/compound"
         });
         const responseMessage = chatCompletion.choices[0]?.message?.content || "No Response From LLama 3";
         return NextResponse.json({
