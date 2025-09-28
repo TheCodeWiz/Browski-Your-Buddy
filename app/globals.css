@@ -55,12 +55,12 @@ body {
 }
 
 .markdown-content pre::-webkit-scrollbar-track {
-  background: #23272a;
+  /* background: #23272a; */
   border-radius: 0.25rem;
 }
 
 .markdown-content pre::-webkit-scrollbar-thumb {
-  background: #4a5568;
+  /* background: #4a5568; */
   border-radius: 0.25rem;
 }
 
