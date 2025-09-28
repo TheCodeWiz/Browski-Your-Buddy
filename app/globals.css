@@ -11,7 +11,6 @@
   }
 }
 
-/* Base styles */
 html {
   height: -webkit-fill-available;
 }
@@ -21,7 +20,6 @@ body {
   min-height: -webkit-fill-available;
 }
 
-/* Responsive markdown styles */
 .markdown-content {
   width: 100%;
   overflow-x: hidden;
@@ -67,7 +65,7 @@ body {
   border-radius: 0.25rem;
 }
 
-/* Table styles */
+
 .markdown-content table {
   width: 100%;
   overflow-x: auto;
@@ -93,7 +91,6 @@ body {
   text-align: left;
 }
 
-/* Typography */
 .markdown-content h1 {
   font-size: 1.25rem;
   font-weight: 600;
@@ -126,7 +123,6 @@ body {
   }
 }
 
-/* Lists */
 .markdown-content ul,
 .markdown-content ol {
   padding-left: 1.5rem;
@@ -137,7 +133,6 @@ body {
   margin: 0.25rem 0;
 }
 
-/* Links */
 .markdown-content a {
   color: #60a5fa;
   text-decoration: none;
@@ -147,7 +142,6 @@ body {
   text-decoration: underline;
 }
 
-/* Code inline */
 .markdown-content code:not(pre code) {
   background: #2d2d2d;
   padding: 0.125rem 0.25rem;
