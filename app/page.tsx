@@ -1,10 +1,7 @@
 
-
-
 "use client";
 
 import { useState, useEffect, FormEvent, useRef } from "react";
-// import CodeSnippet from "../components/CodeBlock";
 import MarkdownMessage from '../components/MarkdownMessage';
 import LinkedInIcon from "@/components/contactMe";
 
@@ -26,7 +23,7 @@ const ChatPage = () => {
 
   useEffect(() => {
     scrollToBottom();
-  }, [messages]);
+  }, [messages, loading]);
 
   const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
@@ -82,34 +79,30 @@ const ChatPage = () => {
   };
 
   return (
-    <div className="flex flex-col min-h-[100dvh] bg-gradient-to-b from-gray-800 via-gray-900 to-black">
-      {/* Header */}
-      <header className="sticky top-0 z-10 backdrop-blur-sm border-gray-800">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 py-4 flex flex-col sm:flex-row justify-between items-center">
-          <h1 className="text-xl sm:text-2xl lg:text-3xl font-semibold bg-gradient-to-l from-slate-700 via-slate-400 to-slate-100 bg-clip-text text-transparent mb-2 sm:mb-0">
-            Chat with Your Buddy
-          </h1>
-          <LinkedInIcon />
-        </div>
-      </header>
+    <>
+      {/* Fixed Gradient Background */}
+      <div className="fixed inset-0 bg-gradient-to-b from-gray-800 via-gray-900 to-black z-0" aria-hidden="true" />
 
-      {/* Chat Container */}
-      <main className="flex-1 w-full max-w-7xl mx-auto px-4 sm:px-6">
-        <div className="h-full flex flex-col">
-          {/* Messages */}
-          <div className="flex-1 overflow-y-auto py-4 space-y-4 no-scrollbar">
+      {/* Foreground content */}
+      <div className="relative flex flex-col min-h-[100dvh] z-10">
+        {/* Header */}
+        <header className="sticky top-0 z-20 backdrop-blur-sm border-gray-800 bg-transparent">
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 py-4 flex flex-col sm:flex-row justify-between items-center">
+            <h1 className="text-xl sm:text-2xl lg:text-3xl font-semibold bg-gradient-to-l from-slate-700 via-slate-400 to-slate-100 bg-clip-text text-transparent mb-2 sm:mb-0">
+              Chat with Your Buddy
+            </h1>
+            <LinkedInIcon />
+          </div>
+        </header>
+
+        {/* Chat Container */}
+        <main className="flex-1 w-full max-w-7xl mx-auto px-4 sm:px-6 flex flex-col">
+          {/* Messages - scrollable with padding bottom for input height */}
+          <div className="flex-1 overflow-y-auto py-4 space-y-4 no-scrollbar pb-24">
             {messages.map((msg) => (
-              <div
-                key={msg.id}
-                className={`flex ${msg.sender === "user" ? "justify-end" : "justify-start"}`}
-              >
-                <div
-                  className={`rounded-lg px-3 py-2 max-w-[85%] sm:max-w-[75%] md:max-w-[65%] lg:max-w-[55%] ${
-                    msg.sender === "user"
-                      ? "bg-[#072da1] text-white"
-                      : "bg-[#0b111e] text-white"
-                  }`}
-                >
+              <div key={msg.id} className={`flex ${msg.sender === "user" ? "justify-end" : "justify-start"}`}>
+                <div className={`rounded-lg px-3 py-2 max-w-[85%] sm:max-w-[75%] md:max-w-[65%] lg:max-w-[55%] ${
+                  msg.sender === "user" ? "bg-[#072da1] text-white" : "bg-[#0b111e] text-white"}`}>
                   {msg.sender === "bot" ? (
                     <div className="overflow-x-auto">
                       <MarkdownMessage content={msg.text} />
@@ -134,10 +127,10 @@ const ChatPage = () => {
             <div ref={messagesEndRef} />
           </div>
 
-          {/* Input Form */}
-          <div className="fixed bottom-8 left-0 w-full z-10 backdrop-blur-sm px-2 pb-2">
+          {/* Input bar fixed to bottom */}
+          <div className="fixed bottom-0 left-0 w-full z-30 backdrop-blur-sm px-4 py-3 shadow-lg">
             <form onSubmit={handleSubmit} className="max-w-4xl mx-auto">
-              <div className="flex items-center gap-2 bg-[#0b111e] rounded-lg px-3 py-2 shadow-lg">
+              <div className="flex items-center gap-2 rounded-lg px-3 py-2 bg-[#0b111e]">
                 <input
                   type="text"
                   value={input}
@@ -149,293 +142,20 @@ const ChatPage = () => {
                   type="submit"
                   disabled={loading || !input.trim()}
                   className={`p-2 rounded-lg transition-colors flex-shrink-0 ${
-                    loading || !input.trim()
-                      ? "text-gray-400 cursor-not-allowed"
-                      : "text-white hover:bg-gray-700"
+                    loading || !input.trim() ? "text-gray-400 cursor-not-allowed" : "text-white hover:bg-gray-700"
                   }`}
                 >
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    viewBox="0 0 24 24"
-                    fill="none"
-                    stroke="currentColor"
-                    className="w-5 h-5 sm:w-6 sm:h-6"
-                  >
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      strokeWidth={2}
-                      d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8"
-                    />
+                  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" className="w-5 h-5 sm:w-6 sm:h-6">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8" />
                   </svg>
                 </button>
               </div>
             </form>
           </div>
-
-        </div>
-      </main>
-    </div>
+        </main>
+      </div>
+    </>
   );
 };
 
 export default ChatPage;
-
-
-
-
-
-
-
-// "use client";
-
-// import { useState, useEffect, FormEvent, useRef } from "react";
-// import AttachmentButton from "@/components/AttachmentButton";
-// import VoiceRecorder from "@/components/VoiceRecorder";
-// import MarkdownMessage from '@/components/MarkdownMessage';
-// // Add these types at the top of your page.tsx file
-// interface Attachment {
-//     file: File;
-//     type: 'file' | 'image' | 'audio';
-//     preview?: string;
-// }
-
-// type Message = {
-//     id: number;
-//     sender: "user" | "bot";
-//     text: string;
-//     attachments?: Attachment[];
-// };
-// const ChatPage = () => {
-//   const [messages, setMessages] = useState<Message[]>([]);
-//   const [input, setInput] = useState("");
-//   const [loading, setLoading] = useState(false);
-//   const [attachments, setAttachments] = useState<Attachment[]>([]);
-//   const messagesEndRef = useRef<HTMLDivElement>(null);
-
-//   const scrollToBottom = () => {
-//     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
-//   };
-
-//   useEffect(() => {
-//     scrollToBottom();
-//   }, [messages]);
-
-//   const handleFileSelect = (files: File[]) => {
-//     const newAttachments = files.map(file => ({
-//       file,
-//       type: 'file' as const
-//     }));
-//     setAttachments(prev => [...prev, ...newAttachments]);
-//   };
-
-//   const handleImageSelect = (files: File[]) => {
-//     const newAttachments = files.map(file => ({
-//       file,
-//       type: 'image' as const,
-//       preview: URL.createObjectURL(file)
-//     }));
-//     setAttachments(prev => [...prev, ...newAttachments]);
-//   };
-
-//   const handleVoiceRecording = async (audioBlob: Blob) => {
-//     const file = new File([audioBlob], 'voice-message.wav', { type: 'audio/wav' });
-//     setAttachments(prev => [...prev, { file, type: 'file' }]);
-//   };
-
-//   const removeAttachment = (index: number) => {
-//     setAttachments(prev => prev.filter((_, i) => i !== index));
-//   };
-//   const handleSubmit = async (e: FormEvent) => {
-//     e.preventDefault();
-//     if (!input.trim() && attachments.length === 0) return;
-
-//     // Create FormData instance
-//     const formData = new FormData();
-//     formData.append('message', input.trim());
-    
-//     // Add all attachments
-//     attachments.forEach((att, index) => {
-//         formData.append(`attachment${index}`, att.file);
-//     });
-
-//     const userMessage: Message = {
-//         id: Date.now(),
-//         sender: "user",
-//         text: input.trim(),
-//         attachments: attachments
-//     };
-
-//     setMessages(prev => [...prev, userMessage]);
-//     setInput("");
-//     setAttachments([]); // Clear attachments after sending
-//     setLoading(true);
-
-//     try {
-//         const response = await fetch("/api/chat", {
-//             method: "POST",
-//             body: formData, // Send formData instead of JSON
-//         });
-
-//         const data = await response.json();
-//         if (response.ok) {
-//             const botMessage: Message = {
-//                 id: Date.now() + 1,
-//                 sender: "bot",
-//                 text: data.response
-//             };
-//             setMessages(prev => [...prev, botMessage]);
-//         } else {
-//             throw new Error(data.error || "Something went wrong!");
-//         }
-//     } catch (err) {
-//         console.error("Error:", err);
-//         const errorMessage: Message = {
-//             id: Date.now() + 1,
-//             sender: "bot",
-//             text: "An unexpected error occurred."
-//         };
-//         setMessages(prev => [...prev, errorMessage]);
-//     } finally {
-//         setLoading(false);
-//     }
-//   };
-
-//   return (
-//     <div className="flex flex-col h-screen bg-gradient-to-b from-gray-800 via-gray-900 to-black no-scrollbar">
-//       {/* Header */}
-//       <h1 className="p-5 text-3xl text-center font-semibold bg-gradient-to-l from-slate-700 via-slate-400 to-slate-100 bg-clip-text text-transparent">
-//         Chat with Your Buddy
-//       </h1>
-
-//       {/* Chat Messages */}
-//       <div className="flex-1 overflow-y-auto p-6 space-y-4 no-scrollbar ">
-//         {messages.map((msg) => (
-//             <div
-//                 key={msg.id}
-//                 className={`flex ${msg.sender === "user" ? "justify-end" : "justify-start"}`}
-//             >
-//                 <div
-//                     className={`rounded-lg px-4 py-2 max-w-xl ${
-//                         msg.sender === "user"
-//                             ? "bg-[#072da1] text-white"
-//                             : "bg-[#0b111e] text-white"
-//                     }`}
-//                 >
-//                     {msg.text}
-//                     {msg.attachments && msg.attachments.length > 0 && (
-//                         <div className="mt-2 flex flex-wrap gap-2">
-//                             {msg.attachments.map((att, index) => (
-//                                 <div key={index} className="relative group">
-//                                     {att.type === 'image' ? (
-//                                         <img
-//                                             src={att.preview}
-//                                             alt="attachment"
-//                                             className="h-20 w-20 object-cover rounded"
-//                                         />
-//                                     ) : att.file.type.startsWith('audio/') ? (
-//                                         <audio
-//                                             controls
-//                                             className="max-w-[200px]"
-//                                             src={URL.createObjectURL(att.file)}
-//                                         />
-//                                     ) : (
-//                                         <div className="flex items-center space-x-2 bg-gray-700 rounded p-2">
-//                                             <svg className="w-4 h-4" viewBox="0 0 20 20" fill="currentColor">
-//                                                 <path d="M4 4a2 2 0 012-2h8a2 2 0 012 2v12a2 2 0 01-2 2H6a2 2 0 01-2-2V4z" />
-//                                             </svg>
-//                                             <span className="text-sm truncate">
-//                                                 {att.file.name}
-//                                             </span>
-//                                         </div>
-//                                     )}
-//                                 </div>
-//                             ))}
-//                         </div>
-//                     )}
-//                 </div>
-//             </div>
-//         ))}
-//         {loading && (
-//           <div className="flex justify-start">
-//             <div className="bg-[#0b111e] rounded-lg px-4 py-2">
-//               <div className="flex space-x-2">
-//                 <div className="w-2 h-2 bg-white/50 rounded-full animate-bounce" />
-//                 <div className="w-2 h-2 bg-white/50 rounded-full animate-bounce delay-100" />
-//                 <div className="w-2 h-2 bg-white/50 rounded-full animate-bounce delay-200" />
-//               </div>
-//             </div>
-//           </div>
-//         )}
-//         <div ref={messagesEndRef} />
-//       </div>
-
-//       <form onSubmit={handleSubmit} className="p-4 border-t border-gray-800 ">
-//         {attachments.length > 0 && (
-//           <div className="flex flex-wrap gap-2  ">
-//             {attachments.map((att, index) => (
-//               <div key={index} className="relative group ">
-//                 {att.type === 'image' ? (
-//                   <img
-//                     src={att.preview}
-//                     alt="attachment"
-//                     className="h-16 w-16 object-cover rounded "
-//                   />
-//                 ) : (
-//                   <div className="h-16 w-16 bg-gray-700 rounded flex items-center justify-center ">
-//                     📎
-//                   </div>
-//                 )}
-//                 <button
-//                   type="button"
-//                   onClick={() => removeAttachment(index)}
-//                   className="absolute -top-2 -right-2 bg-red-500 text-white rounded-full p-1 opacity-0 group-hover:opacity-100 transition-opacity "
-//                 >
-//                   ✕
-//                 </button>
-//               </div>
-//             ))}
-//           </div>
-//         )}
-
-//         <div className="max-w-4xl mx-auto flex items-center gap-4 bg-[#0b111e] rounded-lg px-4">
-//           <AttachmentButton
-//             onFileSelect={handleFileSelect}
-//             onImageSelect={handleImageSelect}
-//           />
-//           <VoiceRecorder onRecordingComplete={handleVoiceRecording} />
-//           <input
-//             type="text"
-//             value={input}
-//             onChange={(e) => setInput(e.target.value)}
-//             placeholder="Type your message..."
-//             className="flex-1 bg-transparent text-white p-4 focus:outline-none placeholder-gray-400"
-//             disabled={loading}
-//           />
-//           <button
-//             type="submit"
-//             disabled={loading}
-//             className="p-3 text-white  rounded-full disabled:opacity-50 transition-colors hover:cursor-pointer hover:bg-gray-600"
-//           >
-//             <svg
-//               xmlns="http://www.w3.org/2000/svg"
-//               viewBox="0 0 24 24"
-//               fill="none"
-//               stroke="currentColor"
-//               className="w-6 h-6"
-//             >
-//               <path
-//                 strokeLinecap="round"
-//                 strokeLinejoin="round"
-//                 strokeWidth={2}
-//                 d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8"
-//               />
-//             </svg>
-//           </button>
-//         </div>
-//       </form>
-//     </div>
-//   );
-// };
-
-// export default ChatPage;
