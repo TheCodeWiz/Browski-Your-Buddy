@@ -1,5 +1,6 @@
 
 
+
 "use client";
 
 import { useState, useEffect, FormEvent, useRef } from "react";
@@ -81,96 +82,104 @@ const ChatPage = () => {
   };
 
   return (
-    <div className="flex flex-col h-screen bg-gradient-to-b from-gray-800 via-gray-900 to-black no-scrollbar">
+    <div className="flex flex-col min-h-[100dvh] bg-gradient-to-b from-gray-800 via-gray-900 to-black">
       {/* Header */}
-      <div className="flex justify-center gap-50 ml-130 mt-3">
-        <h1 className="p-5 text-4xl text-center font-semibold bg-gradient-to-l from-slate-700 via-slate-400 to-slate-100 bg-clip-text text-transparent cursor-default mb-2 -mt-2">
-          Chat with Your Buddy
-        </h1>
-        <LinkedInIcon />
-      </div>
+      <header className="sticky top-0 z-10 backdrop-blur-sm border-gray-800">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 py-4 flex flex-col sm:flex-row justify-between items-center">
+          <h1 className="text-xl sm:text-2xl lg:text-3xl font-semibold bg-gradient-to-l from-slate-700 via-slate-400 to-slate-100 bg-clip-text text-transparent mb-2 sm:mb-0">
+            Chat with Your Buddy
+          </h1>
+          <LinkedInIcon />
+        </div>
+      </header>
 
-      {/* Chat Messages */}
-      <div className="flex-1 overflow-y-auto p-6 space-y-4 no-scrollbar">
-        <div className="flex-1 overflow-y-auto px-2 py-4 space-y-2 no-scrollbar">
-          {messages.map((msg) => (
-            <div
-              key={msg.id}
-              className={`flex ${msg.sender === "user" ? "justify-end" : "justify-start"}`}
-            >
+      {/* Chat Container */}
+      <main className="flex-1 w-full max-w-7xl mx-auto px-4 sm:px-6">
+        <div className="h-full flex flex-col">
+          {/* Messages */}
+          <div className="flex-1 overflow-y-auto py-4 space-y-4 no-scrollbar">
+            {messages.map((msg) => (
               <div
-                className={`rounded-lg px-4 py-2 max-w-full sm:max-w-[700px] md:max-w-[1150px] m-5 ${
-                  msg.sender === "user"
-                    ? "bg-[#072da1] text-white"
-                    : "bg-[#0b111e] text-white"
-                }`}
+                key={msg.id}
+                className={`flex ${msg.sender === "user" ? "justify-end" : "justify-start"}`}
               >
-                {msg.sender === "bot" ? (
-                  <div className="overflow-x-auto">
-                    <MarkdownMessage content={msg.text} />
-                  </div>
-                ) : (
-                  msg.text
-                )}
-              </div>
-            </div>
-          ))}
-          {loading && (
-            <div className="flex justify-start">
-              <div className=" rounded-lg px-4 py-2 max-w-[320px] w-full">
-                <div className="flex space-x-2">
-                  <div className="w-2 h-2 bg-white/50 rounded-full animate-bounce" />
-                  <div className="w-2 h-2 bg-white/50 rounded-full animate-bounce delay-100" />
-                  <div className="w-2 h-2 bg-white/50 rounded-full animate-bounce delay-200" />
+                <div
+                  className={`rounded-lg px-3 py-2 max-w-[85%] sm:max-w-[75%] md:max-w-[65%] lg:max-w-[55%] ${
+                    msg.sender === "user"
+                      ? "bg-[#072da1] text-white"
+                      : "bg-[#0b111e] text-white"
+                  }`}
+                >
+                  {msg.sender === "bot" ? (
+                    <div className="overflow-x-auto">
+                      <MarkdownMessage content={msg.text} />
+                    </div>
+                  ) : (
+                    <div className="break-words text-sm sm:text-base">{msg.text}</div>
+                  )}
                 </div>
               </div>
-            </div>
-          )}
-          <div ref={messagesEndRef} />
-        </div>
+            ))}
+            {loading && (
+              <div className="flex justify-start">
+                <div className="rounded-lg px-3 py-2 max-w-[85%] sm:max-w-[75%] md:max-w-[65%] lg:max-w-[55%] bg-[#0b111e]">
+                  <div className="flex space-x-2">
+                    <div className="w-2 h-2 bg-white/50 rounded-full animate-bounce" />
+                    <div className="w-2 h-2 bg-white/50 rounded-full animate-bounce delay-100" />
+                    <div className="w-2 h-2 bg-white/50 rounded-full animate-bounce delay-200" />
+                  </div>
+                </div>
+              </div>
+            )}
+            <div ref={messagesEndRef} />
+          </div>
 
-      </div>
+          {/* Input Form */}
+          <div className="fixed bottom-8 left-0 w-full z-10 backdrop-blur-sm px-2 pb-2">
+            <form onSubmit={handleSubmit} className="max-w-4xl mx-auto">
+              <div className="flex items-center gap-2 bg-[#0b111e] rounded-lg px-3 py-2 shadow-lg">
+                <input
+                  type="text"
+                  value={input}
+                  onChange={(e) => setInput(e.target.value)}
+                  placeholder="Type your message..."
+                  className="flex-1 bg-transparent text-white placeholder-gray-400 text-sm sm:text-base focus:outline-none min-w-0"
+                />
+                <button
+                  type="submit"
+                  disabled={loading || !input.trim()}
+                  className={`p-2 rounded-lg transition-colors flex-shrink-0 ${
+                    loading || !input.trim()
+                      ? "text-gray-400 cursor-not-allowed"
+                      : "text-white hover:bg-gray-700"
+                  }`}
+                >
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    className="w-5 h-5 sm:w-6 sm:h-6"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth={2}
+                      d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8"
+                    />
+                  </svg>
+                </button>
+              </div>
+            </form>
+          </div>
 
-      {/* Message Input */}
-      <form onSubmit={handleSubmit} className="p-4 border-t border-gray-800">
-        <div className="max-w-4xl mx-auto flex items-center gap-4 bg-[#0b111e] rounded-lg px-4">
-          <input
-            type="text"
-            value={input}
-            onChange={(e) => setInput(e.target.value)}
-            placeholder="Type your message..."
-            className="flex-1 bg-transparent text-white p-4 focus:outline-none placeholder-gray-400"
-            disabled={loading}
-          />
-          <button
-            type="submit"
-            disabled={loading}
-            className="p-3 text-white hover:bg-gray-600 hover:cursor-pointer rounded-full disabled:opacity-50 transition-colors"
-          >
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              viewBox="0 0 24 24"
-              fill="none"
-              stroke="currentColor"
-              className="w-6 h-6"
-            >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth={2}
-                d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8"
-              />
-            </svg>
-          </button>
         </div>
-      </form>
+      </main>
     </div>
   );
 };
 
 export default ChatPage;
-
-
 
 
 
